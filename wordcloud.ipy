@@ -1,0 +1,40 @@
+# ref: https://www.youtube.com/watch?v=eHxWshJpoRk
+
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+import matplotlib.pyplot as plt
+import numpy as np
+from PIL import Image   
+
+custom_mask = np.array(Image.open('data/bat_mask.png'))
+
+text = open('data/habits.txt', 'r').read()
+stopwords = set(STOPWORDS).union({'said', 'one', 'two','will', 'now', 'new', 'may', 'also',
+                               'first', 'last', 'time', 'year',
+                               'S', 'way', 'thing', 'things', 'see', 'make', 'work', 'come', "don't",
+                               'U', 'life', 'live', 'people', 'want', 'others', 'day', 'well', 'know', 'little',
+                               'well', 'become', 'much', 'even', 'good', 'great', 'many', 'get', 'got',
+                                 'go', 'going', 'back', 'think', 'thought', 'say', 'says', 'put', 'putting',
+                                    'look', 'looking', 'looked', 'need', 'needed', 'something', 'try', 'trying',
+                                    'lot', 'lots', 'keep', 'kept', 'keeping',
+                                        'go', 'going', 'back', 'think', 'thought', 'say', 'says', 'put', 'putting',
+                                        'don', 't', 'us', 'll', 've', 're', 'need', 'take', 'lives', 'often',
+                                        'think', 'really', 'result', 'within', 'help', 'person', 'give', 'book', 'create', 'every', 'word'
+                              })
+
+#plt.imshow(custom_mask, cmap=plt.cm.gray)
+#plt.show()
+#custom_mask = (custom_mask>0).astype(int)
+wc = WordCloud(stopwords=stopwords, 
+               background_color="white",  
+               max_words=200, #default is 200
+               max_font_size=200, #de
+               #contour_width=3, contour_color='black',
+               mask=custom_mask) 
+wc.generate(text)
+
+image_colors = ImageColorGenerator(custom_mask) 
+wc.recolor(color_func=image_colors)
+
+plt.imshow(wc, interpolation='bilinear')
+plt.axis("off")
+plt.show()
